@@ -230,8 +230,8 @@ async function getRepos(url = baseUrl, searchstring, flag) {
         let title = "   <p class='card__title'>Карта репозитория</p> ",
           elemName = "<p class='card__title'>" + "" + elem.name + "</p>",
           stars =
-            "<p>" + "колическтво звезд: " + elem.stargazers_count + "</p>",
-          lastCommit = "<p>" + "последний коммит: " + elem.pushed_at + "</p>",
+            "<p>" + "количество звезд: " + elem.stargazers_count + "</p>",
+          lastCommit = "<p>" + "последний коммит: " + elem.pushed_at.slice(0, 10) + "</p>",
           img =
             "<img class= 'repos__avatar' src='" +
             elem.owner.avatar_url +
