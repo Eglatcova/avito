@@ -36,8 +36,10 @@ if (localStorage.getItem("saveData")) {
   getRepos(save[0], save[1]);
 }
 
-async function getRepos(url = baseUrl, searchstring) {
-if(searchstring===undefined){
+async function getRepos(url = baseUrl, searchstring,flag) {
+
+
+  if(searchstring===undefined){
   counter=1;
   save[2]=counter;
   dataUpdate();
@@ -45,7 +47,7 @@ if(searchstring===undefined){
 
   divResult.innerHTML = "";
   let value = search.value;
-  if (searchstring !== undefined) {
+  if (searchstring !== undefined&&flag===undefined) {
     value = searchstring;
 
     search.value = searchstring;
@@ -109,7 +111,7 @@ if(searchstring===undefined){
           dataUpdate();
         }
         let urlPrev = urlNew + counter;
-        getRepos(urlPrev);
+        getRepos(urlPrev,"false","false");
       });
       btnsContainer.append(btnPrev);
 
@@ -150,7 +152,7 @@ if(searchstring===undefined){
           counter = maxPages;
         }
         let urlNext = urlNew + counter;
-        getRepos(urlNext);
+        getRepos(urlNext,"false","false");
         save[2] = counter;
         dataUpdate();
       });
@@ -161,7 +163,7 @@ if(searchstring===undefined){
         if (target.closest(".page")) {
           counter = +target.textContent;
           let urlPage = urlNew + target.textContent;
-          getRepos(urlPage);
+          getRepos(urlPage,"false","false");
           target.classList.add("active-page");
         }
       });
