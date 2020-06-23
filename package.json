@@ -1,0 +1,17 @@
+{
+  "name": "avito",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scrip.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+     "start": "npm run open",
+    "open": "concurrently \"http-server -a localhost -p 3000\" \"open http://localhost:3000/\""
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^5.2.0",
+    "http-server": "^0.12.3"
+  }
+}

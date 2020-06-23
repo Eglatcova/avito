@@ -1,0 +1,54 @@
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+.main__container {
+  display: flex;
+}
+.repos__container {
+  margin-top: 1rem;
+}
+.repos__href {
+  text-decoration: none;
+  margin-top: 0.4rem;
+}
+
+.repos__href:hover {
+  cursor: pointer;
+  color: rgb(125, 194, 190);
+}
+
+.repos__href-active {
+  cursor: default;
+  color: rgb(125, 194, 190);
+}
+
+.repos__card {
+  margin-left: 3rem;
+  padding: 0rem 1rem;
+}
+
+.repos__avatar {
+  width: 100px;
+  height: 100px;
+}
+.btns__container {
+  margin-top: 1rem;
+}
+.active-page {
+  cursor: pointer;
+  color: rgb(125, 194, 190)
+}
+
+.page {
+  cursor: pointer;
+  margin: 0rem 0.2rem;
+}
+
+.card__title {
+  font-size: 1.4rem;
+}
+
+.contributors__title{
+  color: rgb(65, 134, 131);
+}
