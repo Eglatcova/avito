@@ -1,5 +1,5 @@
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .main__container {
@@ -37,7 +37,7 @@
 }
 .active-page {
   cursor: pointer;
-  color: rgb(125, 194, 190)
+  color: rgb(125, 194, 190);
 }
 
 .page {
@@ -49,6 +49,6 @@
   font-size: 1.4rem;
 }
 
-.contributors__title{
+.contributors__title {
   color: rgb(65, 134, 131);
 }

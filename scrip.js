@@ -13,63 +13,69 @@ const baseUrl = "https://api.github.com/search/repositories?q=",
   popularUrl = "https://api.github.com/search/repositories?q=stars:>100000",
   basePageUrl = "&page=",
   firstPage = "1";
-
+//очистка информации при новом запросе
 const cleanAll = () => {
   btnsContainer.innerHTML = "";
   rightContainer.innerHTML = "";
   divResult.innerHTML = "";
 };
-
+//старт запроса при клике на кнопку "Найти репозиторий"
 btnRepos.addEventListener("click", (url) => getRepos());
-
+//массив для записи данных localStorage
 let save = [];
-
+//функция, запускающая запись в localStorage
+//save[0]- url
+//save[1]- value строки поиска (searchstring)
+//save[2]- counter
+//save[3]- данные карточки репозитория (card.innerHTML)
+//save[4]- активная карта в списке(окрашена в бирюзовый)
 const dataUpdate = function () {
   localStorage.setItem("saveData", JSON.stringify(save));
 };
-
+//загрузка из localStorage в save и загрузка страницы вызовом getRepos
 if (localStorage.getItem("saveData")) {
   save = JSON.parse(localStorage.getItem("saveData"));
- 
-    counter = save[2];
-  
+
+  counter = save[2];
+
   getRepos(save[0], save[1]);
 }
 
-async function getRepos(url = baseUrl, searchstring,flag) {
-
-
-  if(searchstring===undefined){
-  counter=1;
-  save[2]=counter;
-  dataUpdate();
-}
-
-  divResult.innerHTML = "";
+async function getRepos(url = baseUrl, searchstring, flag) {
+  cleanAll();
   let value = search.value;
-  if (searchstring !== undefined&&flag===undefined) {
+
+  //если value = "" и нажат поиск, при введение нового value запуск 1 страницы и сохранение в localStorage
+  if (searchstring === undefined) {
+    counter = 1;
+    save[2] = counter;
+    dataUpdate();
+  }
+  //searchstring-строка поиска, flag-есть, когда вызов getRepos() по кнопке, undefined когда из localStorage
+  if (searchstring !== undefined && flag === undefined) {
     value = searchstring;
-
     search.value = searchstring;
-  } else save[1] = value;
-
+  } else {
+    save[1] = value;
+  }
+  //если url пуст, в него записывается адрес первой страницы
   if (url === baseUrl) {
     url = baseUrl + value + quantityOfRepos + basePageUrl + firstPage;
   }
-
+  //вывод на страницу самых популярных репозиториев
   if (value === "") {
     counter = 1;
-
     url = popularUrl;
   }
   save[0] = url;
   save[2] = counter;
   dataUpdate();
   cleanAll();
-
+  //для получения доступа к url всех страниц поиска
   const headers = {
     Accept: "application/vnd.github.mercy-preview+json",
   };
+  //создание fetch-запроса
   const response = await fetch(url, {
     method: "GET",
     headers: headers,
@@ -80,12 +86,13 @@ async function getRepos(url = baseUrl, searchstring,flag) {
       //url без указания страницы и с учетом завпроса
       urlNew = baseUrl + value + quantityOfRepos + basePageUrl,
       link = response.headers.get("link"),
+      //запись в linkMax номера последней страницы запроса
       linkMax = "";
 
     const cleanNavAndPag = () => {
       btnsContainer.innerHTML = "";
     };
-
+    //определение номера последней страницы запроса
     const currentLinkMAx = () => {
       if (link.includes("next")) {
         linkMax = link.split("next")[1].split("page=")[2].replace(/\D+/g, "");
@@ -101,7 +108,9 @@ async function getRepos(url = baseUrl, searchstring,flag) {
 
     //вся навигация и пагинация
     const navAndPag = () => {
+      //создание кнопки Prev
       const btnPrev = document.createElement("button");
+
       btnPrev.textContent = "<";
       btnPrev.addEventListener("click", (e) => {
         counter--;
@@ -111,13 +120,13 @@ async function getRepos(url = baseUrl, searchstring,flag) {
           dataUpdate();
         }
         let urlPrev = urlNew + counter;
-        getRepos(urlPrev,"false","false");
+        getRepos(urlPrev, "valueOfSearch", "true");
       });
       btnsContainer.append(btnPrev);
-
+      //создание контейнера для страниц
       const pagesContainer = document.createElement("span");
       btnsContainer.append(pagesContainer);
-
+      //создание первых пяти кнопок
       for (let i = 1; i <= maxPages; i++) {
         const btn = document.createElement("span");
         if (i <= 5) {
@@ -129,7 +138,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
           btn.classList.add("active-page");
         }
       }
-
+      //создание 6-10 кнопок
       if (counter > 5) {
         pagesContainer.innerHTML = "";
         for (let i = 6; i <= maxPages; i++) {
@@ -140,10 +149,9 @@ async function getRepos(url = baseUrl, searchstring,flag) {
           if (i === +counter) {
             btn.classList.add("active-page");
           }
-
         }
       }
-
+      //создание кнопки next
       const btnNext = document.createElement("button");
       btnNext.textContent = ">";
       btnNext.addEventListener("click", (e) => {
@@ -152,7 +160,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
           counter = maxPages;
         }
         let urlNext = urlNew + counter;
-        getRepos(urlNext,"false","false");
+        getRepos(urlNext, "valueOfSearch", "true");
         save[2] = counter;
         dataUpdate();
       });
@@ -163,7 +171,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
         if (target.closest(".page")) {
           counter = +target.textContent;
           let urlPage = urlNew + target.textContent;
-          getRepos(urlPage,"false","false");
+          getRepos(urlPage, "false", "false");
           target.classList.add("active-page");
         }
       });
@@ -187,7 +195,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
     divResult.append(anchor);
   });
 
-  //карта товара
+  //карта репозитория
   const allHrf = document.querySelectorAll(".repos__href"),
     card = document.createElement("div");
   allHrf.forEach((elem) => {
@@ -218,7 +226,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
     result.items.forEach((elem) => {
       if (elem.name === target.textContent) {
         let contrArr = [];
-
+        //переменные для записи данных репозитория
         let title = "   <p class='card__title'>Карта репозитория</p> ",
           elemName = "<p class='card__title'>" + "" + elem.name + "</p>",
           stars =
@@ -242,7 +250,7 @@ async function getRepos(url = baseUrl, searchstring,flag) {
         } else {
           languages = "<p>" + elem.language + "</p>";
         }
-
+        //запрос для получения авторов
         async function getContributors() {
           let urlContributors = elem.contributors_url;
 
