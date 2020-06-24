@@ -73,12 +73,12 @@ async function getRepos(url = baseUrl, searchstring, flag) {
   cleanAll();
   //для получения доступа к url всех страниц поиска
   const headers = {
-    Accept: "application/vnd.github.mercy-preview+json",
+    "Accept": "application/vnd.github.mercy-preview+json",
   };
   //создание fetch-запроса
   const response = await fetch(url, {
-    method: "GET",
-    headers: headers,
+    "method": "GET",
+    "headers": headers,
   });
 
   if (value !== "") {
@@ -228,27 +228,20 @@ async function getRepos(url = baseUrl, searchstring, flag) {
         let contrArr = [];
         //переменные для записи данных репозитория
         let title = "   <p class='card__title'>Карта репозитория</p> ",
-          elemName = "<p class='card__title'>" + "" + elem.name + "</p>",
-          stars =
-            "<p>" + "количество звезд: " + elem.stargazers_count + "</p>",
-          lastCommit = "<p>" + "последний коммит: " + elem.pushed_at.slice(0, 10) + "</p>",
-          img =
-            "<img class= 'repos__avatar' src='" +
-            elem.owner.avatar_url +
-            "' alt='avatar'>",
-          nameHref =
-            "<a href='" +
-            elem.owner.html_url +
-            "'>" +
-            elem.owner.login +
-            "</a>",
+          elemName = `<p class='card__title'>${elem.name}</p>`,
+          stars = `<p>${"количество звезд: " + elem.stargazers_count}</p>`,
+          lastCommit = `<p>${
+            "последний коммит: " + elem.pushed_at.slice(0, 10)
+          }</p>`,
+          img = `<img class='repos__avatar' src='${elem.owner.avatar_url}' alt='avatar'>`,
+          nameHref = `<a href='${elem.owner.html_url}'>${elem.owner.login}</a>`,
           languages = "",
-          description = "<p>" + elem.description + "</p>";
+          description = `<p>${elem.description}</p>`;
 
         if (elem.language === null) {
-          languages = "<p>" + "язык не указан" + "</p>";
+          languages = "<p>язык не указан</p>";
         } else {
-          languages = "<p>" + elem.language + "</p>";
+          languages = `<p>${elem.language}</p>`;
         }
         //запрос для получения авторов
         async function getContributors() {
@@ -264,7 +257,7 @@ async function getRepos(url = baseUrl, searchstring, flag) {
           let contributors = "<p class='contributors__title'>Авторы</p>";
 
           contrArr.forEach((e) => {
-            contributors += "<p class='contributors'>" + e + "</p>";
+            contributors += `<p class='contributors'>${e}</p>`;
           });
 
           card.innerHTML =
@@ -285,7 +278,6 @@ async function getRepos(url = baseUrl, searchstring, flag) {
         getContributors();
       }
     });
-
     save[2] = counter;
     dataUpdate();
   });
